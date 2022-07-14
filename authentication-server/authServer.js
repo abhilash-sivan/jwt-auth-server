@@ -23,7 +23,7 @@ app.use(helmet());
 
 app.use('/user', userRouter);
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const { API_PORT } = process.env;
 const port = API_PORT || 3001;

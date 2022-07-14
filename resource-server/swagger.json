@@ -1,0 +1,60 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is an auth demo app",
+    "version": "1.0.0",
+    "title": "Resource Server"
+  },
+  "tags": [
+    {
+      "name": "ResourceServer",
+      "description": "Authentication Service validation"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "summary": "Get protected data",
+        "description": "",
+        "operationId": "fetchData",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "401": {
+            "description": "Invalid token supplied"
+          },
+          "403": {
+            "description": "Unauthorised access"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
