@@ -6,18 +6,16 @@ const helmet = require('helmet');
 const userRouter = require('./routes/userRouter');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const cors = require('cors');
 
 const app = express();
 
-//for CORS
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT ,DELETE');
-  res.setHeader('Access-Control-Max-Age', 60 * 60 * 24 * 7);
-  next();
-});
+const corsOptions = {
+  origin: '*'
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(express.json());
 

@@ -1,0 +1,20 @@
+version: '3.3'
+services: 
+  mongodb:
+    image: mongo
+    restart: always
+    volumes: 
+      - my_data:/data/db 
+  auth-server:
+    build: 
+      context: .
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mongodb
+    volumes: 
+      - ./:/auth-app
+    ports: 
+      - "3001:3001"
+  
+volumes: 
+  my_data: 
