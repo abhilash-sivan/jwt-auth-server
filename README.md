@@ -35,3 +35,9 @@ In case if you decide not to use docker, then
   `add local mongo uri to env`<br>
   `npm install`<br>
   `npm run start`<br>
+
+
+*RUN TEST*
+
+  `cd authentication-server/`<br>
+  `npm run test`<br>
