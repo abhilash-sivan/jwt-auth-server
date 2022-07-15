@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('./../model/user')
 const { body, validationResult } = require('express-validator');
-const app = require('../authServer');
 
 
 // Generates an access token valid for 2 minutes
@@ -99,7 +98,7 @@ userRouter.post('/login',
 				});
 
 			} else {
-				res.status(400).send('Invalid Credentials');
+				res.status(404).send({message: 'User not found / Invalid credentials'});
 			}
 		} catch (err) {
 			console.log(err);
