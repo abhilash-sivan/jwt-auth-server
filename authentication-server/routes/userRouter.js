@@ -107,10 +107,10 @@ userRouter.post('/login',
 	});
 
 // accepts the refreshtoken and provide a new accesstoken
-userRouter.post('/token', (req, res) => {
+userRouter.get('/token', (req, res) => {
 	const authHeader = req.headers['authorization'];
 	// takes out token from Bearer Token
-	const token = authHeader && authHeader.split(' ')[1];
+	const token = authHeader && authHeader.split(' ')[1] || authHeader;
 
 	if (!token) {
 		res.json({ message: 'Invalid refresh token' });
@@ -140,20 +140,28 @@ userRouter.post('/token', (req, res) => {
 userRouter.post('/logout', (req, res) => {
 	const authHeader = req.headers['authorization'];
 	// takes out token from Bearer Token
-	const token = authHeader && authHeader.split(' ')[1];
+	const token = authHeader && authHeader.split(' ')[1] || authHeader;
 
 	if (!token) {
-		res.json({ message: 'Invalid refresh token' });
+		res.status(401).json({ message: 'Invalid refresh token' });
 	}
 
 	try {
-		User.updateOne({ 'token': token }, { token: null }).then(user => {
-			console.log(user)
-			res.json({ message: 'Logged out successfully' });
+		User.findOne({ 'token': token }, (err, usr) => {
+			if (err) {
+				res.json({ message: 'Some error occured' });
+			} else if (usr) {
+				User.updateOne({ 'token': token }, { token: null }).then(user => {
+					console.log(user)
+					res.json({ message: 'Logged out successfully' });
+				});
+			} else {
+				res.status(404).json({ message: 'User not found' });
+			}
 		});
 	} catch (error) {
 		console.log(error);
-		res.json({ message: 'Some error occured' });
+		res.status(400).json({ message: 'Some error occured' });
 	}
 
 });

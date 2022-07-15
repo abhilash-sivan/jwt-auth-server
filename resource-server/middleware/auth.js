@@ -10,7 +10,7 @@ const authenticateUser = (req, res, next) => {
 		return res.status(403).send('A token is required for authentication');
 	}
 
-	const token = bearerToken && bearerToken.split(' ')[1];
+	const token = bearerToken && bearerToken.split(' ')[1] || bearerToken;
 
 	try {
 		const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);

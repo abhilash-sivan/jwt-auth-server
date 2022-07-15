@@ -17,8 +17,8 @@ app.get('/', authenticateUser, (req, res) => {
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const API_PORT = process.env.RESOURCE_SERVER_API_PORT || 3000;
+const port = process.env.RESOURCE_SERVER_API_PORT || 4000;
 
-app.listen(API_PORT, () => {
-	console.log(`Server running on port ${API_PORT}`);
+app.listen(port, () => {
+	console.log(`Server running on port ${port}`);
 });
