@@ -112,24 +112,23 @@ userRouter.get('/token', (req, res) => {
 	const token = authHeader && authHeader.split(' ')[1] || authHeader;
 
 	if (!token) {
-		res.json({ message: 'Invalid refresh token' });
+		res.status(401).json({ message: 'Invalid refresh token' });
 	}
 
 	//verifying token integrity before checking in DB
 	jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, (err, data) => {
-		const payload = { id: data.id, sub: data.sub };
-
 		if (err) {
-			res.json({ message: 'Some error occured' });
+			res.staus(403).json({ message: 'Some error occured' });
 		} else {
 			User.findOne({ 'token': token }, (err, usr) => {
 				if (err) {
-					res.json({ message: 'Some error occured' });
+					res.status(500).json({ message: 'Some error occured' });
 				} else if (usr) {
+					const payload = { id: data.id, sub: data.sub };
 					const accessToken = getAccessToken(payload);
-					res.json({ AccessToken: accessToken, message: 'This is new access token' });
+					res.status(200).json({ AccessToken: accessToken, message: 'This is new access token' });
 				} else {
-					res.json({ message: 'Some error occured' });
+					res.status(500).json({ message: 'Some error occured' });
 				}
 			});
 		}
@@ -148,11 +147,11 @@ userRouter.post('/logout', (req, res) => {
 	try {
 		User.findOne({ 'token': token }, (err, usr) => {
 			if (err) {
-				res.json({ message: 'Some error occured' });
+				res.status(400).json({ message: 'Some error occured' });
 			} else if (usr) {
 				User.updateOne({ 'token': token }, { token: null }).then(user => {
 					console.log(user)
-					res.json({ message: 'Logged out successfully' });
+					res.status(200).json({ message: 'Logged out successfully' });
 				});
 			} else {
 				res.status(404).json({ message: 'User not found' });

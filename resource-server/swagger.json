@@ -38,17 +38,35 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "401": {
-            "description": "Invalid token supplied"
+            "description": "Invalid token supplied",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "403": {
-            "description": "Unauthorised access"
-          },
-          "500": {
-            "description": "Internal Server Error"
+            "description": "Unauthorised access",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "ResponseObj": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Response message"
         }
       }
     }

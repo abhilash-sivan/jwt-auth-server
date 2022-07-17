@@ -32,14 +32,13 @@
         "description": "user register api",
         "operationId": "createUser",
         "produces": [
-          "application/xml",
           "application/json"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "Created user object",
+            "description": "Register a user",
             "required": true,
             "schema": {
               "$ref": "#/definitions/User"
@@ -48,13 +47,28 @@
         ],
         "responses": {
           "201": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "409": {
-            "description": "user already exists"
+            "description": "User Already Exist. Please Login",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
+          "500": {
+            "description": "Server encountered an error",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           }
         }
       }
@@ -83,13 +97,28 @@
         ],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/loginResponse"
+            }
           },
           "400": {
-            "description": "Invalid username/password supplied"
+            "description": "Invalid username/password supplied",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           }
         }
       }
@@ -105,13 +134,37 @@
           "user"
         ],
         "summary": "Logs out current logged in user",
-        "description": "",
+        "description": "Logged in user can initiate a logout, expecting refresh token in header",
         "operationId": "logoutUser",
         "produces": [
           "application/json"
         ],
         "parameters": [],
         "responses": {
+          "200": {
+            "description": "Logged out successfully",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
+          "400": {
+            "description": "Not found",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
+          "401": {
+            "description": "Invalid refresh token",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
+          },
           "default": {
             "description": "successful operation"
           }
@@ -126,7 +179,7 @@
           }
         ],
         "summary": "Get new access token",
-        "description": "",
+        "description": "Request a new token with empty body, expecting refresh token in header",
         "operationId": "refreshToken",
         "produces": [
           "application/json"
@@ -134,16 +187,28 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": "successful operation"
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/accessTokenResponse"
+            }
           },
           "401": {
-            "description": "Invalid token supplied"
+            "description": "Invalid token supplied",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "403": {
-            "description": "Unauthorised access"
+            "description": "Unauthorised access",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/ResponseObj"
+            }
           }
         }
       }
@@ -152,18 +217,28 @@
   "definitions": {
     "User": {
       "type": "object",
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "password"
+      ],
       "properties": {
         "firstName": {
-          "type": "string"
+          "type": "string",
+          "example": "Abhilash"
         },
         "lastName": {
-          "type": "string"
+          "type": "string",
+          "example": "Sivan"
         },
         "email": {
-          "type": "string"
+          "type": "string",
+          "example": "abhi@test.com"
         },
         "password": {
-          "type": "string"
+          "type": "string",
+          "example": "abhilash123"
         }
       },
       "xml": {
@@ -173,17 +248,54 @@
     "loginUser": {
       "type": "object",
       "required": [
-        "username",
-        "passowrd"
+        "email",
+        "password"
       ],
       "properties": {
         "email": {
           "type": "string",
-          "description": "unique id of user"
+          "description": "unique identifier of user",
+          "example": "abhi@test.com"
         },
         "password": {
           "type": "string",
-          "description": "password of user"
+          "description": "password of user",
+          "example": "abhilash123"
+        }
+      }
+    },
+    "ResponseObj": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "Response message"
+        }
+      }
+    },
+    "loginResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        },
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "accessTokenResponse": {
+      "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string",
+          "example": "This is your new access token"
         }
       }
     }
